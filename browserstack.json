@@ -1,6 +1,5 @@
 {
   "test_path": "./tests.html",
-  "test_framework": "tape",
   "browsers": [
     "chrome_latest"
   ]
