@@ -4835,7 +4835,34 @@ tapeResults.on('done', function() {
 	BrowserStack.post('/_report', browserStackResults, function(){})
 })
 
-},{"tape":29}],29:[function(require,module,exports){
+},{"tape":30}],29:[function(require,module,exports){
+var tape = require('tape')
+
+exports = module.exports = tape
+
+// Maintain tape@1 compatibility
+exports.Test.prototype._end = (
+  exports.Test.prototype._end ||
+  exports.Test.prototype.end
+)
+
+exports.Test.prototype.run = function () {
+  if (!this._cb || this._skip) {
+    return this._end()
+  }
+  this.emit('prerun')
+  try {
+    this._cb(this)
+  }
+  catch (err) {
+    this.error(err)
+    this._end()
+    return
+  }
+  this.emit('run') 
+}
+
+},{"tape":30}],30:[function(require,module,exports){
 (function (process){
 var defined = require('defined');
 var createDefaultStream = require('./lib/default_stream');
@@ -4981,7 +5008,7 @@ function createHarness (conf_) {
 }
 
 }).call(this,require('_process'))
-},{"./lib/default_stream":30,"./lib/results":31,"./lib/test":32,"_process":12,"defined":36,"through":42}],30:[function(require,module,exports){
+},{"./lib/default_stream":31,"./lib/results":32,"./lib/test":33,"_process":12,"defined":37,"through":43}],31:[function(require,module,exports){
 (function (process){
 var through = require('through');
 var fs = require('fs');
@@ -5016,7 +5043,7 @@ module.exports = function () {
 };
 
 }).call(this,require('_process'))
-},{"_process":12,"fs":2,"through":42}],31:[function(require,module,exports){
+},{"_process":12,"fs":2,"through":43}],32:[function(require,module,exports){
 (function (process){
 var EventEmitter = require('events').EventEmitter;
 var inherits = require('inherits');
@@ -5212,7 +5239,7 @@ function invalidYaml (str) {
 }
 
 }).call(this,require('_process'))
-},{"_process":12,"events":8,"function-bind":37,"has":38,"inherits":39,"object-inspect":40,"resumer":41,"through":42}],32:[function(require,module,exports){
+},{"_process":12,"events":8,"function-bind":38,"has":39,"inherits":40,"object-inspect":41,"resumer":42,"through":43}],33:[function(require,module,exports){
 (function (process,__dirname){
 var deepEqual = require('deep-equal');
 var defined = require('defined');
@@ -5709,7 +5736,7 @@ Test.skip = function (name_, _opts, _cb) {
 
 
 }).call(this,require('_process'),"/node_modules/tape/lib")
-},{"_process":12,"deep-equal":33,"defined":36,"events":8,"has":38,"inherits":39,"path":11}],33:[function(require,module,exports){
+},{"_process":12,"deep-equal":34,"defined":37,"events":8,"has":39,"inherits":40,"path":11}],34:[function(require,module,exports){
 var pSlice = Array.prototype.slice;
 var objectKeys = require('./lib/keys.js');
 var isArguments = require('./lib/is_arguments.js');
@@ -5805,7 +5832,7 @@ function objEquiv(a, b, opts) {
   return typeof a === typeof b;
 }
 
-},{"./lib/is_arguments.js":34,"./lib/keys.js":35}],34:[function(require,module,exports){
+},{"./lib/is_arguments.js":35,"./lib/keys.js":36}],35:[function(require,module,exports){
 var supportsArgumentsClass = (function(){
   return Object.prototype.toString.call(arguments)
 })() == '[object Arguments]';
@@ -5827,7 +5854,7 @@ function unsupported(object){
     false;
 };
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 exports = module.exports = typeof Object.keys === 'function'
   ? Object.keys : shim;
 
@@ -5838,14 +5865,14 @@ function shim (obj) {
   return keys;
 }
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 module.exports = function () {
     for (var i = 0; i < arguments.length; i++) {
         if (arguments[i] !== undefined) return arguments[i];
     }
 };
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
 var slice = Array.prototype.slice;
 var toStr = Object.prototype.toString;
@@ -5895,14 +5922,14 @@ module.exports = function bind(that) {
 };
 
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 var bind = require('function-bind');
 
 module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
 
-},{"function-bind":37}],39:[function(require,module,exports){
+},{"function-bind":38}],40:[function(require,module,exports){
 arguments[4][9][0].apply(exports,arguments)
-},{"dup":9}],40:[function(require,module,exports){
+},{"dup":9}],41:[function(require,module,exports){
 module.exports = function inspect_ (obj, opts, depth, seen) {
     if (!opts) opts = {};
     
@@ -6051,7 +6078,7 @@ function inspectString (str) {
     }
 }
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 (function (process){
 var through = require('through');
 var nextTick = typeof setImmediate !== 'undefined'
@@ -6084,7 +6111,7 @@ module.exports = function (write, end) {
 };
 
 }).call(this,require('_process'))
-},{"_process":12,"through":42}],42:[function(require,module,exports){
+},{"_process":12,"through":43}],43:[function(require,module,exports){
 (function (process){
 var Stream = require('stream')
 
@@ -6196,17 +6223,17 @@ function through (write, end, opts) {
 
 
 }).call(this,require('_process'))
-},{"_process":12,"stream":26}],43:[function(require,module,exports){
+},{"_process":12,"stream":26}],44:[function(require,module,exports){
 
 
 'use strict'
 
-var test = require('tape')
-var add = require('./browserstack-test').add
+var test = require('tape-catch')
+var add = require('./index').add
 
 test('addition', function(t) {
   t.equal(add(1, 2), 3)
   t.end()
 })
 
-},{"./browserstack-test":1,"tape":29}]},{},[43,28]);
+},{"./index":1,"tape-catch":29}]},{},[44,28]);

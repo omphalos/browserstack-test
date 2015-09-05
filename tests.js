@@ -2,8 +2,8 @@
 
 'use strict'
 
-var test = require('tape')
-var add = require('./browserstack-test').add
+var test = require('tape-catch')
+var add = require('./index').add
 
 test('addition', function(t) {
   t.equal(add(1, 2), 3)

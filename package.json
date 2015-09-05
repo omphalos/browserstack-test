@@ -2,11 +2,11 @@
   "name": "browserstack-test",
   "version": "0.0.1",
   "description": "Testing browserstack-travis integration",
-  "main": "browserstack-test.js",
+  "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/browserstack-runner",
-    "test-node": "./tests.js",
-    "build": "./node_modules/.bin/browserify tests.js node_modules/browserstack-tape-reporter/index.js > tests.browserstack.js"
+    "test": "./tests.js && npm run browserstack",
+    "build": "node_modules/.bin/browserify tests.js node_modules/browserstack-tape-reporter/index.js -o tests.browserstack.js",
+    "browserstack": "npm run build && ./node_modules/.bin/browserstack-runner"
   },
   "keywords": [],
   "repository": {
@@ -23,6 +23,7 @@
     "browserify": "^11.0.1",
     "browserstack-runner": "^0.3.7",
     "browserstack-tape-reporter": "^1.0.1",
-    "tape": "^4.2.0"
+    "tape": "^4.2.0",
+    "tape-catch": "^1.0.4"
   }
 }

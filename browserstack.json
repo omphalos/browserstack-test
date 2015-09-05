@@ -1,5 +1,6 @@
 {
-  "test_path": "./tests.html",
+  "test_path": "index.html",
+  "timeout": 600,
   "browsers": [
     "chrome_latest"
   ]
